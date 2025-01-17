@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from "react-router-dom";
 
 const LoginPage = () => {
   const [documento, setDocumento] = useState('');
@@ -67,8 +68,11 @@ const LoginPage = () => {
 
 
   return (
-    <div style={{ maxWidth: '400px', margin: '0 auto', padding: '20px' }}>
+    <div className='formulario'>
       <h2>Iniciar Sesión</h2>
+      <div className="logo-grande">
+        <div><img src="src/images/logoNew.png" alt="Logo Agro-app" /></div>
+      </div>
       <form onSubmit={handleLogin}>
         <div style={{ marginBottom: '15px' }}>
           <label htmlFor="documento">Documento</label>
@@ -78,8 +82,8 @@ const LoginPage = () => {
             value={documento}
             onChange={(e) => setDocumento(e.target.value)}
             placeholder="Ingresa tu documento"
+            className='input-formulario'
             required
-            style={{ width: '100%', padding: '10px', marginTop: '5px' }}
           />
         </div>
         <div style={{ marginBottom: '15px' }}>
@@ -90,8 +94,8 @@ const LoginPage = () => {
             value={contrasena}
             onChange={(e) => setContrasena(e.target.value)}
             placeholder="Ingresa tu contraseña"
+            className='input-formulario'
             required
-            style={{ width: '100%', padding: '10px', marginTop: '5px' }}
           />
         </div>
         {error && (
@@ -101,19 +105,12 @@ const LoginPage = () => {
         )}
         <button
           type="submit"
-          style={{
-            width: '100%',
-            padding: '10px',
-            backgroundColor: '#007BFF',
-            color: '#fff',
-            border: 'none',
-            borderRadius: '5px',
-            cursor: 'pointer',
-          }}
+          className='boton boton-amplio'
         >
           Iniciar Sesión
         </button>
       </form>
+      <Link to="/crear_cuenta" className="enlace">Crear una cuenta</Link>
     </div>
   );
 };

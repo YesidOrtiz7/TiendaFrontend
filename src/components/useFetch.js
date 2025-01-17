@@ -42,26 +42,25 @@ const messagesFunction=(method,error)=>{
     }
 }
 const API_SERVER = "http://localhost:8080/";
-/**event, method, formData, clearForm,setData, setMessage, setError, setLoading, url, urlRetorno */
 export default async function query(event, method, formData, clearForm,
-    setData, setMessage, setError, setLoading, url, urlRetorno){
-    if(!isObjectEmpty(event)){
-        //console.log(isObjectEmpty(event));
-        event.preventDefault()
+    setData, setMessage, setError, setLoading, url, urlRetorno) {
+    if (!isObjectEmpty(event)) {
+        event.preventDefault();
     }
     try {
-        if (typeof setLoading === "function"){
+        if (typeof setLoading === "function") {
             setLoading(true);
         }
-        let response={};
-        if (isObjectEmpty(formData)){
+
+        let response = {};
+        if (isObjectEmpty(formData)) {
             response = await fetch(`${API_SERVER}${url}`, {
                 method,
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
-        }else{
+        } else {
             response = await fetch(`${API_SERVER}${url}`, {
                 method,
                 headers: {
@@ -70,40 +69,39 @@ export default async function query(event, method, formData, clearForm,
                 body: JSON.stringify(formData)
             });
         }
-        const result=await response.json();
-        if (typeof setData === "function" && result != null){
+
+        const result = await response.json();
+
+        if (typeof setData === "function" && result != null) {
             setData(result);
         }
 
-        if (typeof clearForm === "function"){
-            clearForm();
-        }
-
-
-        if (typeof setError === "function" && typeof setMessage === "function"){
+        if (typeof setError === "function" && typeof setMessage === "function") {
             if (!response.ok) {
-                const errorResponse = await response.json();
-                //setMessage(errorResponse.errorMessage || `HTTP error! status: ${response.status}`);
-                setError(errorResponse.errorMessage || messagesFunction(method,true));
+                setError(result.errorMessage || messagesFunction(method, true));
                 return;
             }
-            setMessage(messagesFunction(method,false));
+            setMessage(messagesFunction(method, false));
         }
-        
-        
-        if (typeof urlRetorno === "string"){
+
+        if (typeof urlRetorno === "string") {
             window.location.href = `${API_SERVER}${urlRetorno}`;
         }
 
     } catch (error) {
         if (error.name === "AbortError") {
-            console.log("Peticion cancelada");
+            console.log("Petición cancelada");
         } else {
             console.error('Error:', error);
-            setMessage(error.message || messagesFunction(method,true));
+            if (typeof setMessage === "function") {
+                setMessage(error.message || messagesFunction(method, true));
+            }
         }
     } finally {
-        if (typeof setLoading === "function"){
+        if (typeof clearForm === "function") {
+            clearForm();
+        }
+        if (typeof setLoading === "function") {
             setLoading(false);
         }
     }

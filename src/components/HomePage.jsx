@@ -9,14 +9,7 @@ const HomePage = () => {
       <div style={{ marginBottom: "20px" }}>
         <Link
           to="/crear_publicacion"
-          style={{
-            display: "inline-block",
-            padding: "10px 20px",
-            backgroundColor: "#007BFF",
-            color: "#fff",
-            textDecoration: "none",
-            borderRadius: "5px",
-          }}
+          className="boton"
         >
           Crear Publicación
         </Link>
