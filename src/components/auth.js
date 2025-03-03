@@ -1,4 +1,5 @@
-const API_URL = 'http://localhost:8080';
+//const API_URL = 'http://localhost:8080/api/auth/validate';
+const API_URL = 'http://localhost:8080/categorias';
 
 export const isAuthenticated = async () => {
   const token = localStorage.getItem('token');

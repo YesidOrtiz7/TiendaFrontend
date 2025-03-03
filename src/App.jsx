@@ -6,6 +6,7 @@ import LoginPage from './components/LoginPage';
 import SingupPage from './components/nuevoUsuario/SingupPage'
 import CrearPublicacionForm from './components/CrearPublicacionForm';
 import Barra from './components/Barra';
+import QRPage from './components/QRPage';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Routes>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/crear_cuenta" element={<SingupPage/>}/>
+            <Route path="/qr" element={<QRPage />} />
             <Route
               path="/"
               element={

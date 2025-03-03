@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Modal from '../Modal';
 import query from '../useFetch';
+import { useNavigate } from 'react-router-dom';
 
 const SingupPage = () => {
     const [formData, setFormData] = useState({
@@ -14,15 +15,24 @@ const SingupPage = () => {
     });
 
     const clearForm = () => {
-        setFormData({});
+        setFormData({
+            documento: "",
+            correo: "",
+            nombres: "",
+            apellidos: "",
+            telefono: "",
+            contrasena: "",
+            confirmarContrasena: "",
+        });
     }
     const [error, setError] = useState("");
     const [message, setMessage] = useState("");
+    const navigate = useNavigate();
+
     const handleChange = (e) => {
-        const { name, value } = e.target;
         setFormData({
-            ...formData,
-            [name]: value,
+            ...formData, // Mantiene los valores actuales
+            [e.target.name]: e.target.value, // Actualiza solo el campo modificado
         });
     };
     const handleSubmit = (e) => {
@@ -46,16 +56,34 @@ const SingupPage = () => {
 
         // Enviar el objeto JSON
         const jsonToSend = { ...dataToSend, contrasena };
-        console.log("data to send: ",dataToSend);
-        console.log("form data: ",formData);
-        query(e, "POST", jsonToSend, clearForm, null, setMessage, setError, null, "usuarios/nuevousuario", null)
+
+        console.log("data to send: ", dataToSend);
+        console.log("form data: ", formData);
+        query(
+            e,
+            "POST",
+            jsonToSend,
+            clearForm,
+            (data) => {
+                //console.log(data);
+                if(data.qrCodeUrl!=null){
+                    navigate("/qr", { state: { qrData: data } });
+                }
+            },
+            setMessage,
+            setError,
+            null,
+            "usuarios/nuevousuario",
+            null,
+            true
+        );
         console.log("Datos enviados:", jsonToSend);
     };
     return (
         <div className="formulario">
-            <Modal mensaje={message} error={error} onClose={()=>{setMessage(''); setError('');}}/>
+            <Modal mensaje={message} error={error} onClose={() => { setMessage(''); setError(''); clearForm(); }} />
             <h2>Registrarse</h2>
-            <form onSubmit={(e)=>{handleSubmit(e)}}>
+            <form onSubmit={handleSubmit}>
                 <div className="input-formulario-agrupado">
                     <label>Documento</label>
                     <input

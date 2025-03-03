@@ -43,33 +43,32 @@ const messagesFunction=(method,error)=>{
 }
 const API_SERVER = "http://localhost:8080/";
 export default async function query(event, method, formData, clearForm,
-    setData, setMessage, setError, setLoading, url, urlRetorno) {
+    setData, setMessage, setError, setLoading, url, urlRetorno, authentication) {
+
     if (!isObjectEmpty(event)) {
         event.preventDefault();
     }
+
+    if (typeof setLoading === "function") {
+        setLoading(true);
+    }
+
+    /*si el parametro authentication es true, entonces incluye el token de acceso */
+    const headers = {
+        'Content-Type': 'application/json',
+        ...(authentication && { Authorization: `Bearer ${localStorage.getItem('token')}` }),
+    };
+
     try {
-        if (typeof setLoading === "function") {
-            setLoading(true);
-        }
+        //construye la configuracion para fetch
+        const options = {
+            method,
+            headers,
+            ...(isObjectEmpty(formData) ? {} : { body: JSON.stringify(formData) }),
+        };
 
-        let response = {};
-        if (isObjectEmpty(formData)) {
-            response = await fetch(`${API_SERVER}${url}`, {
-                method,
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-        } else {
-            response = await fetch(`${API_SERVER}${url}`, {
-                method,
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            });
-        }
-
+        //ejecuta la llamada a fetch
+        const response = await fetch(`${API_SERVER}${url}`, options);
         const result = await response.json();
 
         if (typeof setData === "function" && result != null) {
@@ -77,32 +76,26 @@ export default async function query(event, method, formData, clearForm,
         }
 
         if (typeof setError === "function" && typeof setMessage === "function") {
-            if (!response.ok) {
-                setError(result.errorMessage || messagesFunction(method, true));
-                return;
-            }
-            setMessage(messagesFunction(method, false));
+            response.ok
+                ? setMessage(messagesFunction(method, false))
+                : setError(result.errorMessage || messagesFunction(method, true));
         }
 
         if (typeof urlRetorno === "string") {
-            window.location.href = `${API_SERVER}${urlRetorno}`;
+            window.location.assign(`http://localhost:5173/${urlRetorno}`);
         }
 
     } catch (error) {
-        if (error.name === "AbortError") {
-            console.log("Petición cancelada");
-        } else {
+        if (error.name !== "AbortError") {
             console.error('Error:', error);
             if (typeof setMessage === "function") {
                 setMessage(error.message || messagesFunction(method, true));
             }
+        }else{
+            console.log('Peticion cancelada');
         }
     } finally {
-        if (typeof clearForm === "function") {
-            clearForm();
-        }
-        if (typeof setLoading === "function") {
-            setLoading(false);
-        }
+        clearForm?.();
+        setLoading?.(false);
     }
 }

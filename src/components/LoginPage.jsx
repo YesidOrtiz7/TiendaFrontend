@@ -4,11 +4,18 @@ import { Link } from "react-router-dom";
 const LoginPage = () => {
   const [documento, setDocumento] = useState('');
   const [contrasena, setContrasena] = useState('');
+  const [totpCode, setTotpCode] = useState('');
   const [error, setError] = useState('');
 
-  const API_URL = 'http://localhost:8080/api/auth/login'; // Cambia esta URL por la de tu API
+  const API_URL = 'http://localhost:8080/api/auth/login';
 
-  /*const handleLogin = async (e) => {
+  const clearForm=()=>{
+    setDocumento('');
+    setContrasena('');
+    setTotpCode('');
+  }
+
+  const handleLogin = async (e) => {
     e.preventDefault(); // Previene la recarga de la página
 
     try {
@@ -17,54 +24,39 @@ const LoginPage = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ documento, contrasena }),
+        body: JSON.stringify({ documento, contrasena, totpCode }),
       });
-      console.log(response)
 
       if (response.ok) {
-        const data = await response.json();
-        localStorage.setItem('token', data.token); // Guarda el token en localStorage
-        window.location.href = '/'; // Redirige al usuario a la página principal
+        // Extrae el token del encabezado
+        const token = response.headers.get('Authorization');
+        if (token) {
+          localStorage.setItem('token', token); // Guarda el token en localStorage
+          window.location.href = '/'; // Redirige al usuario a la página principal
+        } else {
+          setError('No se encontró el token en los encabezados de la respuesta');
+        }
       } else {
-        const errorData = await response.json();
-        setError(errorData.message || 'Credenciales inválidas'); // Muestra el error si la API lo devuelve
+        //console.log(response);
+        if(response.status===403 || response.status===401){
+          try{
+            const errorData= await response.json();
+            setError(errorData.message || 'Credenciales inválidas'); // Muestra el error si la API lo devuelve
+            clearForm();
+            return;
+          }catch(err){
+            setError('Credenciales inválidas');
+            clearForm();
+            console.log(err);
+          }
+          
+        }
       }
     } catch (err) {
       console.error('Error al realizar la petición:', err);
       setError('Ocurrió un error, intenta nuevamente.');
     }
-  };*/
-  const handleLogin = async (e) => {
-    e.preventDefault(); // Previene la recarga de la página
-
-    try {
-        const response = await fetch(API_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ documento, contrasena }),
-        });
-
-        if (response.ok) {
-            // Extrae el token del encabezado
-            const token = response.headers.get('Authorization'); 
-            console.log(response.headers);
-            if (token) {
-                localStorage.setItem('token', token); // Guarda el token en localStorage
-                window.location.href = '/'; // Redirige al usuario a la página principal
-            } else {
-                setError('No se encontró el token en los encabezados de la respuesta');
-            }
-        } else {
-            const errorData = await response.json();
-            setError(errorData.message || 'Credenciales inválidas'); // Muestra el error si la API lo devuelve
-        }
-    } catch (err) {
-        console.error('Error al realizar la petición:', err);
-        setError('Ocurrió un error, intenta nuevamente.');
-    }
-};
+  };
 
 
   return (
@@ -94,6 +86,18 @@ const LoginPage = () => {
             value={contrasena}
             onChange={(e) => setContrasena(e.target.value)}
             placeholder="Ingresa tu contraseña"
+            className='input-formulario'
+            required
+          />
+        </div>
+        <div style={{ marginBottom: '15px' }}>
+          <label htmlFor="totp">Codigo de seguridad</label>
+          <input
+            type="password"
+            id="totp"
+            value={totpCode}
+            onChange={(e) => setTotpCode(e.target.value)}
+            placeholder="Ingresa tu codigo"
             className='input-formulario'
             required
           />

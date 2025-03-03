@@ -6,7 +6,7 @@ const Barra=()=>{
                 <img src="src\images\logoNew.png" alt="logo" />
             </div>
             <menu id="top-right">
-                <li><a href="#">Productos</a></li>
+                <li><a href="/">Productos</a></li>
                 <li><a href="#">Carrito</a></li>
                 <li><a href="/login">Iniciar sesion</a></li>
                 <li><a href="/crear_cuenta">Crear cuenta</a></li>
