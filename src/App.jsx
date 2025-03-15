@@ -7,6 +7,7 @@ import SingupPage from './components/nuevoUsuario/SingupPage'
 import CrearPublicacionForm from './components/CrearPublicacionForm';
 import Barra from './components/Barra';
 import QRPage from './components/QRPage';
+import PrivateRoute from './components/ControlForRoleComponents/PrivateRoute'
 
 function App() {
   return (
@@ -27,7 +28,9 @@ function App() {
               path="/crear_publicacion"
               element={
                 <ProtectedRoute>
-                  <CrearPublicacionForm />
+                  <PrivateRoute roles={["USUARIO"]}>
+                    <CrearPublicacionForm />
+                  </PrivateRoute>
                 </ProtectedRoute>
               }
             />
