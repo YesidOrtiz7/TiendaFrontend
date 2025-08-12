@@ -8,6 +8,8 @@ import CrearPublicacionForm from './components/CrearPublicacionForm';
 import Barra from './components/Barra';
 import QRPage from './components/QRPage';
 import PrivateRoute from './components/ControlForRoleComponents/PrivateRoute'
+import CrearCategoria from './components/adminView/CrearCategoria';
+import HomeCategorias from './components/adminView/HomeCategorias';
 
 function App() {
   return (
@@ -30,6 +32,26 @@ function App() {
                 <ProtectedRoute>
                   <PrivateRoute roles={["USUARIO"]}>
                     <CrearPublicacionForm />
+                  </PrivateRoute>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/crear_categoria"
+              element={
+                <ProtectedRoute>
+                  <PrivateRoute roles={["ADMIN"]}>
+                    <CrearCategoria />
+                  </PrivateRoute>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/categorias"
+              element={
+                <ProtectedRoute>
+                  <PrivateRoute roles={["ADMIN"]}>
+                    <HomeCategorias />
                   </PrivateRoute>
                 </ProtectedRoute>
               }

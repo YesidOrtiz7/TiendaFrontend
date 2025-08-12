@@ -12,7 +12,6 @@ const CrearPublicacionForm = () => {
   const [categorias, setCategorias] = useState([]);
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
-  const API_PUBLICACION_URL = 'http://localhost:8080/productos';
 
   const clearForm=()=>{
     setTituloPublicacion('');
@@ -48,7 +47,7 @@ const CrearPublicacionForm = () => {
             'Authorization': `Bearer ${token}`,
         }
     });;
-    console.log(response);
+    //console.log(response);
       if (response.ok) {
         const data = await response.json();
         setCategorias(data); // Guarda las categorías en el estado
@@ -62,7 +61,6 @@ const CrearPublicacionForm = () => {
   };
 
   useEffect(() => {
-    //query({},'GET', {}, {},setCategorias, {}, setError, {}, 'categorias/', {});
     fetchCategorias(); // Carga las categorías al montar el componente
   }, []);
 
@@ -90,41 +88,16 @@ const CrearPublicacionForm = () => {
       },
       visible: true,
     };
-    //const token = localStorage.getItem('jwtToken');
 
-    query(
-      null,
-      'POST',
-      publicacion,
+    query({
+      method: 'POST',
+      formData: publicacion,
       clearForm,
-      null,
       setMessage,
       setError,
-      null,
-      'categorias/crear',
-      null,
-      true
-    );
-    /*try {
-      const response = await fetch(API_PUBLICACION_URL+'/crear', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify(publicacion),
-      });
-
-      if (response.ok) {
-        setMessage('Publicación creada exitosamente.');
-      } else {
-        const errorData = await response.json();
-        setError(errorData.message || 'Error al crear la publicación.');
-      }
-    } catch (err) {
-      console.error('Error al enviar la publicación:', err);
-      setError('Ocurrió un error, intenta nuevamente.');
-    }*/
+      url: 'productos/crear',
+      authentication: true
+    });
   };
 
   return (

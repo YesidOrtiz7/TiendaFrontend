@@ -36,48 +36,45 @@ const SingupPage = () => {
         });
     };
     const handleSubmit = (e) => {
-
+        e.preventDefault();
         //desempaquetando los datos del formulario y separando los campos de contrasena
         const { contrasena, confirmarContrasena, ...dataToSend } = formData;
 
         //validando si los campos esta llenos
-        if (Object.values(dataToSend).some((value) => value === "")) {
+        if (Object.values(dataToSend).some((value) => value.trim() === "") || contrasena.trim() === "" || confirmarContrasena.trim() === "") {
             setError("Por favor, complete todos los campos.");
             return;
         }
 
         //validando si las contraseñas coinciden
         if (contrasena !== confirmarContrasena) {
+            console.log(contrasena+" != "+confirmarContrasena);
             setError("Las contraseñas no coinciden.");
             return;
         }
 
-        setError("");
 
         // Enviar el objeto JSON
         const jsonToSend = { ...dataToSend, contrasena };
-
-        console.log("data to send: ", dataToSend);
-        console.log("form data: ", formData);
+       
         query(
-            e,
-            "POST",
-            jsonToSend,
-            clearForm,
-            (data) => {
-                //console.log(data);
-                if(data.qrCodeUrl!=null){
-                    navigate("/qr", { state: { qrData: data } });
-                }
-            },
-            setMessage,
-            setError,
-            null,
-            "usuarios/nuevousuario",
-            null,
-            true
+            {
+                event:e,
+                method:"POST",
+                formData:jsonToSend,
+                clearForm:clearForm,
+                setData:(data) => {
+                    //console.log(data);
+                    if(data.qrCodeUrl!=null){
+                        navigate("/qr", { state: { qrData: data } });
+                    }
+                },
+                setMessage: setMessage,
+                setError: setError,
+                url: "usuarios/nuevousuario",
+                authentication: true
+            }
         );
-        console.log("Datos enviados:", jsonToSend);
     };
     return (
         <div className="formulario">

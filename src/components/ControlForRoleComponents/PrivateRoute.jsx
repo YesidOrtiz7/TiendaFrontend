@@ -5,10 +5,11 @@ import {hasRole} from "./hasRole";
 const PrivateRoute = ({ children, roles }) => {
     const { user, loading } = useAuth();
 
-    !user&&console.log("PrivateRoute dice: no existe usuario: "+user)
+    // !user&&console.log("PrivateRoute dice: no existe usuario: "+user)
+    !user?.roles&&console.log("PrivateRoute dice: no existe usuario: "+user)
 
     if (loading) return <p>Cargando...</p>;
-    if (!user) return <Navigate to="/login" />;
+    // if (!user) return <Navigate to="/login" />;
     if (!hasRole(user,roles)) return <Navigate to="/" />;    
   
     return children;

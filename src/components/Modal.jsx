@@ -6,7 +6,8 @@ const Modal = ({ mensaje, error, onClose }) => {
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-        <h3>Mensaje</h3>
+        {mensaje&&<h3>Mensaje</h3>}
+        {error&&<h3>Error</h3>}
         {mensaje && <p>{mensaje}</p>}
         {error && <p>{error}</p>}
         <button onClick={onClose}>Aceptar</button>
