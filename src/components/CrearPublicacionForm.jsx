@@ -8,6 +8,7 @@ const CrearPublicacionForm = () => {
   const [precio, setPrecio] = useState('');
   const [categoriaId, setCategoriaId] = useState('');
   const [cantidadDisponible, setCantidadDisponible] = useState('');
+  const [imagenes, setImagenes]=useState([]);
 
   const [categorias, setCategorias] = useState([]);
   const [error, setError] = useState('');
@@ -19,7 +20,12 @@ const CrearPublicacionForm = () => {
     setPrecio('');
     setCategoriaId('');
     setCantidadDisponible('');
+    setImagenes([]);
   }
+
+  const handleImageChange=(e)=>{
+    setImagenes(Array.from(e.target.files));
+  };
 
   // Función para extraer el documento del JWT
   const getDocumentoFromToken = () => {
@@ -68,6 +74,7 @@ const CrearPublicacionForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault(); // Previene la recarga de la página
     const documentoUsuario = getDocumentoFromToken();
+    const formData=new FormData();
 
     if (!documentoUsuario) {
       setError('No se pudo autenticar al usuario. Por favor, inicia sesión nuevamente.');
@@ -88,15 +95,26 @@ const CrearPublicacionForm = () => {
       },
       visible: true,
     };
+    // añadiendo los datos de la publicacion
+        /*formData.append('publicacion', JSON.stringify(publicacion));*/
+    formData.append( // enviando los datos como un Blob tipo JSON
+      "publicacion",
+      new Blob([JSON.stringify(publicacion)], { type: "application/json" })
+    );
+    // añadiendo las imagenes
+    imagenes.forEach((img)=>{
+      formData.append('imagenes',img);
+    });
 
     query({
       method: 'POST',
-      formData: publicacion,
+      formData,
       clearForm,
       setMessage,
       setError,
       url: 'productos/crear',
-      authentication: true
+      authentication: true,
+      isMultipart: true,
     });
   };
 
@@ -106,7 +124,7 @@ const CrearPublicacionForm = () => {
       <Modal message={message} error={error} onClose={
         ()=>{setMessage(''); setError(''); clearForm();}
       }/>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} encType="multipart/form-data">
         <div className='input-formulario-agrupado'>
           <label htmlFor="titulo">Título de la Publicación</label>
           <input
@@ -164,6 +182,17 @@ const CrearPublicacionForm = () => {
             value={cantidadDisponible}
             onChange={(e) => setCantidadDisponible(e.target.value)}
             required
+            className='input-formulario'
+          />
+        </div>
+        <div className='input-formulario-agrupado'>
+          <label htmlFor="imagenes">Imágenes del producto</label>
+          <input
+            type="file"
+            id="imagenes"
+            accept="image/*"
+            multiple
+            onChange={handleImageChange}
             className='input-formulario'
           />
         </div>

@@ -29,7 +29,7 @@ const ProductosPage = () => {
       {/* {message && <p >{message}</p>} */}
 
       {/* Renderiza los productos */}
-      <div className='productoContainer'>
+      <div className='product-container'>
         {productos.length > 0 ? (
           productos.map((producto) =>
             producto.visible ? ( // Evalúa si el producto es visible

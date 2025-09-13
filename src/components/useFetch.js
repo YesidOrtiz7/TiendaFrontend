@@ -29,13 +29,14 @@ export default async function query({
   url = "",
   urlRetorno = null,
   authentication = false,
+  isMultipart = false,
 } = {}) {
   try {
     if (event?.preventDefault) event.preventDefault();
     setLoading(true);
 
     const headers = {
-      "Content-Type": "application/json",
+      ...(!isMultipart&& {"Content-Type": "application/json"}),
       ...(authentication && {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       }),
@@ -44,7 +45,9 @@ export default async function query({
     const options = {
       method,
       headers,
-      ...(formData && !isObjectEmpty(formData) && { body: JSON.stringify(formData) }),
+      ...(formData &&
+        !isObjectEmpty(formData) &&
+        { body: isMultipart ? formData : JSON.stringify(formData),}),
     };
 
     const response = await fetch(`${API_SERVER}${url}`, options);
