@@ -10,6 +10,7 @@ import QRPage from './components/QRPage';
 import PrivateRoute from './components/ControlForRoleComponents/PrivateRoute'
 import CrearCategoria from './components/adminView/CrearCategoria';
 import HomeCategorias from './components/adminView/HomeCategorias';
+import UsuariosTable from './components/adminView/UsuariosTable';
 
 function App() {
   return (
@@ -52,6 +53,16 @@ function App() {
                 <ProtectedRoute>
                   <PrivateRoute roles={["ADMIN"]}>
                     <HomeCategorias />
+                  </PrivateRoute>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/usuarios"
+              element={
+                <ProtectedRoute>
+                  <PrivateRoute roles={["ADMIN"]}>
+                    <UsuariosTable />
                   </PrivateRoute>
                 </ProtectedRoute>
               }

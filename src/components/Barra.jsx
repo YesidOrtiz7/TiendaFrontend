@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 import { useAuth } from "./ControlForRoleComponents/AuthContext";
 import {hasRole} from "./ControlForRoleComponents/hasRole";
@@ -16,6 +17,7 @@ const Barra=()=>{
                 <li className="cursor-pointer"><a href="/">Productos</a></li>
                 {hasRole(user, ["USUARIO"]) && <li className="cursor-pointer"><a href="#">Carrito</a></li>}
                 {hasRole(user, ["ADMIN"]) && <li className="cursor-pointer"><a href="/categorias">Categorias</a></li>}
+                {hasRole(user, ["ADMIN"]) && <li className="cursor-pointer"><Link to={"/usuarios"}>Usuarios</Link></li>}
                 {!user &&(
                     <>
                         <li className="cursor-pointer"><a href="/login">Iniciar sesion</a></li>
