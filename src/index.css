@@ -25,61 +25,63 @@ body {
   --BorderInputFormulario:solid 1px rgb(76, 168, 81);
   --ColorHoverElemento:rgb(113, 245, 120);
   --ColorPrincipal: #4dcc2d;
+  --ColorSecundario:rgb(64, 146, 69);
+  --ColorTexto: #000;
 }
-#top{
-  z-index: 100;
-  background: var(--ColorPrincipal);
-  height: 50px;
-  width: 100%;
-  position: fixed;
-  box-shadow: var(--BoxShadow);
-}
-#top-left{
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  width: 200px;
-  margin-left: 200px;
-}
-#top-left img{
-  height: 50px;
-}
-#top-right{
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  margin-right: 200px;
-
-  padding: 0;
+#navbar {
   display: flex;
   justify-content: space-between;
-  height: 50px;
-}
-#top-right li{
-  height: 50px;
-  list-style: none;
-  display: inline-block;
   align-items: center;
-  padding-top: 15px;
-  transition: 0.5s ease;
+  padding: 12px 24px;
+  background-color: var(--ColorPrincipal);
+  border-bottom: 1px solid #e5e7eb;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
-#top-right a{
-  /* display: block;
-  height: 100%;
-  line-height: 50px; */
+#navbar-logo{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+#navbar-logo img{
+  height: 50px;
+  width: auto;
+}
+.navbar-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--ColorTexto);
+}
+.navbar-links{
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+.navbar-link {
   text-decoration: none;
-  margin: auto;
   color: #000;
-  padding: 0 20px;
-  transition: 0.5s ease;
+  font-size: 0.95rem;
+  transition: color 0.2s ease;
 }
-
-#top-right a:hover{
+.navbar-link:hover {
   color: var(--ColorHover);
 }
-#top-right li:hover{
-  /* border-bottom: var(--BordeHoverElemento); */
+/* Botón destacado */
+.navbar-btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border-color: var(--BorderInputFormulario);
+  background-color: var(--ColorSecundario);
+  color: rgb(144, 247, 149);
+  text-decoration: none;
+  font-weight: 500;
+  transition: background 0.2s ease;
+}
+
+.navbar-btn:hover {
   background-color: var(--ColorHoverElemento);
+  color: var(--ColorTexto);
 }
 
 /* MainLayout */

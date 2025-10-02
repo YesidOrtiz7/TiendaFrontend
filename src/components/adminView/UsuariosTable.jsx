@@ -7,23 +7,23 @@ const UsuariosTable= ()=>{
     const [totalPages,setTotalPages]=useState(0);
     
     const fetchUsuarios = async () => {
-    try {
-      const response = await axios.get(
-        `http://localhost:8080/usuarios/todos?page=${page}&elements=${size}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
+        try {
+        const response = await axios.get(
+            `http://localhost:8080/usuarios/todos?page=${page}&elements=${size}`,
+            {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+            }
+        );
 
-      const data = response.data;
-      setUsuarios(data.content);   // los usuarios vienen en `content`
-      setTotalPages(data.totalPages);
-    } catch (error) {
-      console.error("Error al obtener usuarios", error);
-    }
-  };
+        const data = response.data;
+        setUsuarios(data.content);   // los usuarios vienen en `content`
+        setTotalPages(data.totalPages);
+        } catch (error) {
+        console.error("Error al obtener usuarios", error);
+        }
+    };
     useEffect(()=>{
         fetchUsuarios();
     },[page,size]);

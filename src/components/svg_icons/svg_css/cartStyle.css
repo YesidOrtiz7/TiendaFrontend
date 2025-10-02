@@ -1,0 +1,23 @@
+.cart-bounce {
+  display: flex;
+  align-items: center;
+  gap: 8px; /*separacion entre el svg y el texto*/
+  cursor: pointer;
+  color: black;
+}
+.cart-bounce span{
+  align-items: center;
+}
+.cart-bounce:hover{
+  color: rgb(90, 107, 117);
+}
+.cart-bounce:hover .cart-icon {
+  animation: bounce 0.6s ease;
+  color: rgb(90, 107, 117);
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  30% { transform: translateY(-8px); } /* sube */
+  60% { transform: translateY(4px); }  /* baja un poco */
+}
